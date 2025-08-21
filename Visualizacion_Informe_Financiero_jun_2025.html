@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Económico Financiero - Trivium Junio 2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .main-container {
+            max-width: 1900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            font-size: 1.8em;
+            margin: 40px 0 25px;
+            padding: 15px;
+            background: linear-gradient(to right, #f0f4f8, transparent);
+            border-left: 5px solid #667eea;
+            border-radius: 5px;
+        }
+        h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+            margin: 25px 0 15px;
+            text-align: center;
+        }
+        
+        /* Gauge Styles */
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        
+        .gauge {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .gauge-value {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .gauge-label {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 0.85em;
+        }
+        
+        .gauge-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .gauge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .gauge-details {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #7f8c8d;
+        }
+        
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .kpi-title {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .kpi-change {
+            font-size: 0.85em;
+            color: #95a5a6;
+        }
+        
+        /* Tables */
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table-custom thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .table-custom th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+        
+        .table-custom td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.9em;
+        }
+        
+        .table-custom tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .table-custom tbody tr.highlight-row {
+            background: #f0f4f8;
+            font-weight: 600;
+        }
+        
+        /* Badges */
+        .badge-custom {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-info { background: #d1ecf1; color: #0c5460; }
+        
+        /* Utilities */
+        .positive { color: #27ae60; font-weight: 600; }
+        .negative { color: #e74c3c; font-weight: 600; }
+        .neutral { color: #f39c12; font-weight: 600; }
+        
+        /* Tab Navigation */
+        .nav-tabs-custom {
+            border-bottom: 2px solid #667eea;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tabs-custom .nav-link {
+            color: #7f8c8d;
+            border: none;
+            padding: 12px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+        
+        .nav-tabs-custom .nav-link:hover {
+            color: #667eea;
+            background: #f8f9fa;
+        }
+        
+        .nav-tabs-custom .nav-link.active {
+            color: #667eea;
+            background: white;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        /* Alert Boxes */
+        .alert-custom {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            border-left: 5px solid #3498db;
+        }
+        
+        .alert-icon {
+            font-size: 1.5em;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container-small {
+            height: 300px;
+        }
+        
+        /* Progress Bars */
+        .progress-custom {
+            height: 30px;
+            background: #ecf0f1;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-bar-custom {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-weight: bold;
+            transition: width 1.5s ease;
+        }
+        
+        .progress-green { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .progress-yellow { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+        .progress-red { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        .progress-blue { background: linear-gradient(90deg, #3498db, #2980b9); }
+        
+        /* Dynamic Summary Cards Container */
+        #dynamicSummaryCards {
+            margin-bottom: 30px;
+        }
+        
+        /* NOF specific styles */
+        .nof-metric {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .nof-metric:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .nof-metric-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .nof-metric-label {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .nof-metric-detail {
+            font-size: 0.9em;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>📊 INFORME ECONÓMICO FINANCIERO</h1>
+        <p class="subtitle">Trivium Agronomía y Maquinaria S.L. | Análisis Integral - Junio 2025</p>
+
+        <!-- Navigation Tabs (MOVED UP) -->
+        <ul class="nav nav-tabs nav-tabs-custom" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="resumen-tab" data-bs-toggle="tab" data-bs-target="#resumen" type="button">
+                    📋 Resumen Ejecutivo
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="resultados-tab" data-bs-toggle="tab" data-bs-target="#resultados" type="button">
+                    📈 Cuenta de Resultados
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="balance-tab" data-bs-toggle="tab" data-bs-target="#balance" type="button">
+                    ⚖️ Balance
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="flujos-tab" data-bs-toggle="tab" data-bs-target="#flujos" type="button">
+                    💵 Flujos Efectivo
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ratios-tab" data-bs-toggle="tab" data-bs-target="#ratios" type="button">
+                    📊 Ratios
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="nof-tab" data-bs-toggle="tab" data-bs-target="#nof" type="button">
+                    🔄 NOF
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="conclusiones-tab" data-bs-toggle="tab" data-bs-target="#conclusiones" type="button">
+                    ✅ Conclusiones
+                </button>
+            </li>
+        </ul>
+
+        <!-- Dynamic Summary Cards (CHANGE PER TAB) -->
+        <div id="dynamicSummaryCards"></div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="myTabContent">
+            
+            <!-- Tab 1: Resumen Ejecutivo -->
+            <div class="tab-pane fade show active" id="resumen" role="tabpanel">
+                <h2>🎯 RESUMEN EJECUTIVO - SITUACIÓN ACTUAL</h2>
+                
+                <div class="row">
+                    <!-- Indicadores principales con Gauges -->
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge1" class="gauge"></canvas>
+                                <div class="gauge-value">30,4%</div>
+                            </div>
+                            <div class="gauge-label">RATIO EQUITY</div>
+                            <div class="gauge-details">
+                                Objetivo: 38% | Real: 30,4%<br>
+                                <span class="badge-warning">⚠️ BAJO OBJETIVO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge2" class="gauge"></canvas>
+                                <div class="gauge-value">2,2%</div>
+                            </div>
+                            <div class="gauge-label">MARGEN NETO</div>
+                            <div class="gauge-details">
+                                Objetivo: 11,3% | Real: 2,2%<br>
+                                <span class="badge-danger">⚠️ MUY BAJO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge3" class="gauge"></canvas>
+                                <div class="gauge-value">1,85%</div>
+                            </div>
+                            <div class="gauge-label">ROA</div>
+                            <div class="gauge-details">
+                                Jun 2024: 2,65% | Real: 1,85%<br>
+                                <span class="badge-danger">⚠️ DETERIORO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge4" class="gauge"></canvas>
+                                <div class="gauge-value">6,09%</div>
+                            </div>
+                            <div class="gauge-label">ROE</div>
+                            <div class="gauge-details">
+                                Jun 2024: 8,45% | Real: 6,09%<br>
+                                <span class="badge-warning">BAJO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge5" class="gauge"></canvas>
+                                <div class="gauge-value">0,84x</div>
+                            </div>
+                            <div class="gauge-label">ROTACIÓN ACTIVOS</div>
+                            <div class="gauge-details">
+                                Jun 2024: 0,73x | Real: 0,84x<br>
+                                <span class="badge-success">✓ MEJORA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge6" class="gauge"></canvas>
+                                <div class="gauge-value">92 días</div>
+                            </div>
+                            <div class="gauge-label">CICLO CONVERSIÓN EFECTIVO</div>
+                            <div class="gauge-details">
+                                Objetivo: 95 días | Real: 92 días<br>
+                                <span class="badge-success">✓ CUMPLE</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge7" class="gauge"></canvas>
+                                <div class="gauge-value">4,2x</div>
+                            </div>
+                            <div class="gauge-label">COBERTURA INTERESES</div>
+                            <div class="gauge-details">
+                                Objetivo: 5,2x | Real: 4,2x<br>
+                                <span class="badge-warning">MEJORABLE</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="gauge8" class="gauge"></canvas>
+                                <div class="gauge-value">0,32 M€</div>
+                            </div>
+                            <div class="gauge-label">TESORERÍA</div>
+                            <div class="gauge-details">
+                                Mínimo: 2 M€ | Real: 0,32 M€<br>
+                                <span class="badge-danger">⚠️ CRÍTICO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertas principales -->
+                <div class="alert-custom alert-success">
+                    <span class="alert-icon">✅</span>
+                    <div>
+                        <strong>ASPECTOS POSITIVOS:</strong><br>
+                        • Recuperación del beneficio neto tras pérdidas en Q1 2025 (1,86 M€)<br>
+                        • EBITDA de 2,55 M€ supera previsiones presupuestarias (+9%)<br>
+                        • Mejora significativa en periodo medio de cobro: 39 días vs 54 días en 2024<br>
+                        • Free Cash Flow positivo de 9,2 M€
+                    </div>
+                </div>
+
+                <div class="alert-custom alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>ÁREAS DE ATENCIÓN:</strong><br>
+                        • Inventarios excesivos: 60,4 M€ (+33% trimestral)<br>
+                        • Margen neto del 2,2% muy inferior al objetivo del 11,3%<br>
+                        • NOF de 42,35 M€ supera presupuesto en 9 M€<br>
+                        • Periodo medio de almacén alto: 142 días vs objetivo 130 días
+                    </div>
+                </div>
+
+                <div class="alert-custom alert-danger">
+                    <span class="alert-icon">🔴</span>
+                    <div>
+                        <strong>RIESGOS CRÍTICOS:</strong><br>
+                        • Z-Altman en 2,16 (zona gris de riesgo moderado)<br>
+                        • Tesorería mínima de 0,32 M€ (crítico para operación)<br>
+                        • Deuda neta elevada: 69,5 M€ (+34% vs Q1)<br>
+                        • Cash flow operativo negativo: -0,27 M€<br>
+                        • Alta dependencia de financiación bancaria a corto plazo
+                    </div>
+                </div>
+
+                <!-- Evolución Temporal -->
+                <h3>Evolución de Indicadores Clave</h3>
+                <div class="chart-container">
+                    <canvas id="evolutionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tab 2: Cuenta de Resultados -->
+            <div class="tab-pane fade" id="resultados" role="tabpanel">
+                <h2>💰 ANÁLISIS DE LA CUENTA DE RESULTADOS</h2>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="res1" class="gauge"></canvas>
+                                <div class="gauge-value">22%</div>
+                            </div>
+                            <div class="gauge-label">MARGEN CONTRIBUCIÓN</div>
+                            <div class="gauge-details">
+                                Estable vs 2024<br>
+                                <span class="badge-info">→ ESTABLE</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="res2" class="gauge"></canvas>
+                                <div class="gauge-value">3,0%</div>
+                            </div>
+                            <div class="gauge-label">MARGEN EBITDA</div>
+                            <div class="gauge-details">
+                                Sobre ventas<br>
+                                <span class="badge-warning">MEJORABLE</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="res3" class="gauge"></canvas>
+                                <div class="gauge-value">1,8%</div>
+                            </div>
+                            <div class="gauge-label">MARGEN EBIT</div>
+                            <div class="gauge-details">
+                                Sobre ventas<br>
+                                <span class="badge-warning">BAJO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="res4" class="gauge"></canvas>
+                                <div class="gauge-value">-0,36 M€</div>
+                            </div>
+                            <div class="gauge-label">RESULTADO FINANCIERO</div>
+                            <div class="gauge-details">
+                                Mejor que ppto: -0,73 M€<br>
+                                <span class="badge-success">✓ MEJOR</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla comparativa -->
+                <h3>Comparativa de Resultados</h3>
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Jun 2025</th>
+                            <th>Mar 2025</th>
+                            <th>Jun 2024</th>
+                            <th>Presupuesto</th>
+                            <th>Desviación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ventas</strong></td>
+                            <td>84,17 M€</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Margen Contribución</td>
+                            <td>18,52 M€</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td class="neutral">22%</td>
+                        </tr>
+                        <tr>
+                            <td>EBITDA</td>
+                            <td><strong>2,55 M€</strong></td>
+                            <td>0,51 M€</td>
+                            <td>-</td>
+                            <td>2,34 M€</td>
+                            <td class="positive">+9%</td>
+                        </tr>
+                        <tr>
+                            <td>EBIT</td>
+                            <td><strong>1,50 M€</strong></td>
+                            <td>-0,02 M€</td>
+                            <td>1,77 M€</td>
+                            <td>-</td>
+                            <td class="negative">-15%</td>
+                        </tr>
+                        <tr>
+                            <td>Resultado Financiero</td>
+                            <td>-0,36 M€</td>
+                            <td>-</td>
+                            <td>-0,47 M€</td>
+                            <td>-0,73 M€</td>
+                            <td class="positive">+50%</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Beneficio Neto</strong></td>
+                            <td><strong>1,86 M€</strong></td>
+                            <td>-0,22 M€</td>
+                            <td>2,24 M€</td>
+                            <td>2,12 M€</td>
+                            <td class="negative">-12%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Evolución de márgenes -->
+                <h3>Evolución de Márgenes</h3>
+                <div class="progress-custom">
+                    <div class="progress-bar-custom progress-green" style="width: 22%;">
+                        Margen Contribución: 22%
+                    </div>
+                </div>
+                <div class="progress-custom">
+                    <div class="progress-bar-custom progress-yellow" style="width: 30%;">
+                        Margen EBITDA: 3.0%
+                    </div>
+                </div>
+                <div class="progress-custom">
+                    <div class="progress-bar-custom progress-red" style="width: 22%;">
+                        Margen Neto: 2.2%
+                    </div>
+                </div>
+
+                <!-- Gráfico de resultados -->
+                <div class="chart-container">
+                    <canvas id="resultadosChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tab 3: Balance -->
+            <div class="tab-pane fade" id="balance" role="tabpanel">
+                <h2>⚖️ ANÁLISIS DEL BALANCE DE SITUACIÓN</h2>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="bal1" class="gauge"></canvas>
+                                <div class="gauge-value">60,4 M€</div>
+                            </div>
+                            <div class="gauge-label">INVENTARIOS</div>
+                            <div class="gauge-details">
+                                +33% vs Q1<br>
+                                <span class="badge-danger">⚠️ EXCESIVO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="bal2" class="gauge"></canvas>
+                                <div class="gauge-value">21,7 M€</div>
+                            </div>
+                            <div class="gauge-label">CUENTAS A COBRAR</div>
+                            <div class="gauge-details">
+                                Estable<br>
+                                <span class="badge-info">→ ESTABLE</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="bal3" class="gauge"></canvas>
+                                <div class="gauge-value">82,8 M€</div>
+                            </div>
+                            <div class="gauge-label">ACTIVO CORRIENTE</div>
+                            <div class="gauge-details">
+                                82,5% del total<br>
+                                <span class="badge-warning">ALTO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="bal4" class="gauge"></canvas>
+                                <div class="gauge-value">62,0 M€</div>
+                            </div>
+                            <div class="gauge-label">PASIVO CORRIENTE</div>
+                            <div class="gauge-details">
+                                61,8% del total<br>
+                                <span class="badge-danger">⚠️ ELEVADO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estructura del Balance -->
+                <h3>Estructura del Balance</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container chart-container-small">
+                            <canvas id="balanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container chart-container-small">
+                            <canvas id="pasivoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>ACTIVO</th>
+                            <th>Importe</th>
+                            <th>%</th>
+                            <th>PASIVO + PN</th>
+                            <th>Importe</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ACTIVO NO CORRIENTE</strong></td>
+                            <td>17,5 M€</td>
+                            <td>17,5%</td>
+                            <td><strong>PATRIMONIO NETO</strong></td>
+                            <td>30,5 M€</td>
+                            <td>30,4%</td>
+                        </tr>
+                        <tr>
+                            <td>Inmovilizado Material</td>
+                            <td>16,8 M€</td>
+                            <td>16,8%</td>
+                            <td>Capital y Reservas</td>
+                            <td>28,6 M€</td>
+                            <td>28,5%</td>
+                        </tr>
+                        <tr>
+                            <td>Otros Activos NC</td>
+                            <td>0,7 M€</td>
+                            <td>0,7%</td>
+                            <td>Resultado del Ejercicio</td>
+                            <td>1,9 M€</td>
+                            <td>1,9%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ACTIVO CORRIENTE</strong></td>
+                            <td>82,8 M€</td>
+                            <td>82,5%</td>
+                            <td><strong>PASIVO NO CORRIENTE</strong></td>
+                            <td>7,8 M€</td>
+                            <td>7,8%</td>
+                        </tr>
+                        <tr>
+                            <td>Existencias</td>
+                            <td>60,4 M€</td>
+                            <td>60,2%</td>
+                            <td>Deuda a Largo Plazo</td>
+                            <td>7,8 M€</td>
+                            <td>7,8%</td>
+                        </tr>
+                        <tr>
+                            <td>Deudores</td>
+                            <td>21,7 M€</td>
+                            <td>21,7%</td>
+                            <td><strong>PASIVO CORRIENTE</strong></td>
+                            <td>62,0 M€</td>
+                            <td>61,8%</td>
+                        </tr>
+                        <tr>
+                            <td>Tesorería</td>
+                            <td>0,3 M€</td>
+                            <td>0,3%</td>
+                            <td>Acreedores Comerciales</td>
+                            <td>39,9 M€</td>
+                            <td>39,8%</td>
+                        </tr>
+                        <tr>
+                            <td>Otros AC</td>
+                            <td>0,4 M€</td>
+                            <td>0,4%</td>
+                            <td>Deuda a Corto Plazo</td>
+                            <td>22,1 M€</td>
+                            <td>22,0%</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>TOTAL ACTIVO</strong></td>
+                            <td><strong>100,3 M€</strong></td>
+                            <td><strong>100%</strong></td>
+                            <td><strong>TOTAL PASIVO + PN</strong></td>
+                            <td><strong>100,3 M€</strong></td>
+                            <td><strong>100%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 4: Flujos de Efectivo -->
+            <div class="tab-pane fade" id="flujos" role="tabpanel">
+                <h2>💵 ESTADO DE FLUJOS DE EFECTIVO</h2>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="cf1" class="gauge"></canvas>
+                                <div class="gauge-value">-0,27 M€</div>
+                            </div>
+                            <div class="gauge-label">CF OPERATIVO</div>
+                            <div class="gauge-details">
+                                Negativo<br>
+                                <span class="badge-danger">⚠️ CRÍTICO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="cf2" class="gauge"></canvas>
+                                <div class="gauge-value">-2,73 M€</div>
+                            </div>
+                            <div class="gauge-label">CF INVERSIÓN</div>
+                            <div class="gauge-details">
+                                CAPEX del periodo<br>
+                                <span class="badge-info">INVERSIÓN</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="cf3" class="gauge"></canvas>
+                                <div class="gauge-value">+4,23 M€</div>
+                            </div>
+                            <div class="gauge-label">CF FINANCIACIÓN</div>
+                            <div class="gauge-details">
+                                Nueva deuda<br>
+                                <span class="badge-danger">⚠️ ENDEUDAMIENTO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="cf4" class="gauge"></canvas>
+                                <div class="gauge-value">9,2 M€</div>
+                            </div>
+                            <div class="gauge-label">FREE CASH FLOW</div>
+                            <div class="gauge-details">
+                                Mejora vs 2024<br>
+                                <span class="badge-success">✓ POSITIVO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Análisis del Capital de Trabajo -->
+                <h3>Análisis del Capital de Trabajo</h3>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="wc1" class="gauge"></canvas>
+                                <div class="gauge-value">39 días</div>
+                            </div>
+                            <div class="gauge-label">PERIODO MEDIO COBRO</div>
+                            <div class="gauge-details">
+                                2024: 54 días<br>
+                                <span class="badge-success">✓ MEJORA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="wc2" class="gauge"></canvas>
+                                <div class="gauge-value">142 días</div>
+                            </div>
+                            <div class="gauge-label">PERIODO MEDIO ALMACÉN</div>
+                            <div class="gauge-details">
+                                Objetivo: 130 días<br>
+                                <span class="badge-warning">ALTO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="wc3" class="gauge"></canvas>
+                                <div class="gauge-value">89 días</div>
+                            </div>
+                            <div class="gauge-label">PERIODO MEDIO PAGO</div>
+                            <div class="gauge-details">
+                                Alivia tensión<br>
+                                <span class="badge-info">ELEVADO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="wc4" class="gauge"></canvas>
+                                <div class="gauge-value">92 días</div>
+                            </div>
+                            <div class="gauge-label">CICLO CONVERSIÓN EFECTIVO</div>
+                            <div class="gauge-details">
+                                2024: 172 días<br>
+                                <span class="badge-success">✓ MEJORA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de flujos -->
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Importe</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tesorería Inicial</td>
+                            <td>0,50 M€</td>
+                            <td>Saldo a inicio del periodo</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Flujo Actividades Operativas</strong></td>
+                            <td class="negative">-0,27 M€</td>
+                            <td>Generación negativa de caja operativa</td>
+                        </tr>
+                        <tr>
+                            <td>EBITDA</td>
+                            <td>2,55 M€</td>
+                            <td>Resultado operativo antes de amortizaciones</td>
+                        </tr>
+                        <tr>
+                            <td>Variación Capital de Trabajo</td>
+                            <td class="negative">-2,82 M€</td>
+                            <td>Incremento de inventarios principalmente</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Flujo Actividades Inversión</strong></td>
+                            <td class="negative">-2,73 M€</td>
+                            <td>Inversiones en inmovilizado</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Flujo Actividades Financiación</strong></td>
+                            <td class="positive">+4,23 M€</td>
+                            <td>Nueva deuda bancaria</td>
+                        </tr>
+                        <tr>
+                            <td>Nueva Deuda CP</td>
+                            <td>5,50 M€</td>
+                            <td>Incremento deuda corto plazo</td>
+                        </tr>
+                        <tr>
+                            <td>Amortización Deuda</td>
+                            <td>-1,27 M€</td>
+                            <td>Pagos de principal</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Tesorería Final</strong></td>
+                            <td><strong>0,32 M€</strong></td>
+                            <td class="negative">Nivel crítico</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 5: Ratios Financieros -->
+            <div class="tab-pane fade" id="ratios" role="tabpanel">
+                <h2>📊 ANÁLISIS DE RATIOS FINANCIEROS</h2>
+                
+                <!-- Ratios de Rentabilidad -->
+                <h3>Ratios de Rentabilidad</h3>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="rat1" class="gauge"></canvas>
+                                <div class="gauge-value">1,85%</div>
+                            </div>
+                            <div class="gauge-label">ROA</div>
+                            <div class="gauge-details">
+                                2024: 2,65%<br>
+                                <span class="badge-danger">⚠️ DETERIORO</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="rat2" class="gauge"></canvas>
+                                <div class="gauge-value">6,09%</div>
+                            </div>
+                            <div class="gauge-label">ROE</div>
+                            <div class="gauge-details">
+                                2024: 8,45%<br>
+                                <span class="badge-warning">BAJA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="rat3" class="gauge"></canvas>
+                                <div class="gauge-value">2,48%</div>
+                            </div>
+                            <div class="gauge-label">ROCE</div>
+                            <div class="gauge-details">
+                                2024: 3,17%<br>
+                                <span class="badge-warning">BAJA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-4">
+                        <div class="gauge-card">
+                            <div class="gauge-container">
+                                <canvas id="rat4" class="gauge"></canvas>
+                                <div class="gauge-value">15,3%</div>
+                            </div>
+                            <div class="gauge-label">CASH ROCE</div>
+                            <div class="gauge-details">
+                                Q1: -4,9%<br>
+                                <span class="badge-success">✓ MEJORA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evolución de rentabilidad -->
+                <h3>Evolución de Ratios de Rentabilidad</h3>
+                <div class="chart-container">
+                    <canvas id="rentabilidadChart"></canvas>
+                </div>
+
+                <!-- Z-Score Altman -->
+                <h3>Análisis de Riesgo - Z-Score Altman</h3>
+                <div class="alert-custom alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Z-SCORE ACTUAL: 2,16 (ZONA GRIS)</strong><br>
+                        • Diciembre 2023: 3,05 (Zona Segura)<br>
+                        • Junio 2024: 2,67 (Zona Gris Alta)<br>
+                        • Marzo 2025: 2,45 (Zona Gris)<br>
+                        • <strong>Junio 2025: 2,16 (Zona Gris)</strong><br>
+                        • Objetivo Presupuesto: 2,83<br><br>
+                        <strong>Interpretación:</strong> Riesgo moderado de insolvencia. Requiere medidas correctivas inmediatas.
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="zscoreChart"></canvas>
+                </div>
+
+                <!-- Tabla comparativa de ratios -->
+                <h3>Tabla Comparativa de Ratios</h3>
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Ratio</th>
+                            <th>Jun 2025</th>
+                            <th>Mar 2025</th>
+                            <th>Jun 2024</th>
+                            <th>Benchmark</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="background: #f0f4f8;"><strong>RENTABILIDAD</strong></td>
+                        </tr>
+                        <tr>
+                            <td>ROA</td>
+                            <td>1,85%</td>
+                            <td>-</td>
+                            <td>2,65%</td>
+                            <td>>3%</td>
+                            <td><span class="badge-danger">BAJO</span></td>
+                        </tr>
+                        <tr>
+                            <td>ROE</td>
+                            <td>6,09%</td>
+                            <td>-</td>
+                            <td>8,45%</td>
+                            <td>>10%</td>
+                            <td><span class="badge-warning">MEJORABLE</span></td>
+                        </tr>
+                        <tr>
+                            <td>ROCE</td>
+                            <td>2,48%</td>
+                            <td>-</td>
+                            <td>3,17%</td>
+                            <td>>5%</td>
+                            <td><span class="badge-danger">BAJO</span></td>
+                        </tr>
+                        <tr>
+                            <td>ROIC</td>
+                            <td>1,86%</td>
+                            <td>-</td>
+                            <td>2,38%</td>
+                            <td>>4%</td>
+                            <td><span class="badge-danger">BAJO</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="background: #f0f4f8;"><strong>ACTIVIDAD</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Rotación Activos</td>
+                            <td>0,84x</td>
+                            <td>-</td>
+                            <td>0,73x</td>
+                            <td>>1,5x</td>
+                            <td><span class="badge-warning">BAJA</span></td>
+                        </tr>
+                        <tr>
+                            <td>PMC (días)</td>
+                            <td>39</td>
+                            <td>-</td>
+                            <td>54</td>
+                            <td><35</td>
+                            <td><span class="badge-success">BUENO</span></td>
+                        </tr>
+                        <tr>
+                            <td>PMA (días)</td>
+                            <td>142</td>
+                            <td>-</td>
+                            <td>210</td>
+                            <td><120</td>
+                            <td><span class="badge-warning">ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td>PMP (días)</td>
+                            <td>89</td>
+                            <td>74</td>
+                            <td>-</td>
+                            <td>60-75</td>
+                            <td><span class="badge-warning">ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="background: #f0f4f8;"><strong>SOLVENCIA</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ratio Endeudamiento</td>
+                            <td>0,68</td>
+                            <td>-</td>
+                            <td>0,68</td>
+                            <td><0,6</td>
+                            <td><span class="badge-warning">ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td>Cobertura Intereses</td>
+                            <td>4,2x</td>
+                            <td>-0,1x</td>
+                            <td>-</td>
+                            <td>>5x</td>
+                            <td><span class="badge-warning">MEJORABLE</span></td>
+                        </tr>
+                        <tr>
+                            <td>Apalancamiento</td>
+                            <td>0,3</td>
+                            <td>-</td>
+                            <td>0,3</td>
+                            <td><0,25</td>
+                            <td><span class="badge-warning">ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td>Z-Altman Score</td>
+                            <td>2,16</td>
+                            <td>2,45</td>
+                            <td>2,67</td>
+                            <td>>3,0</td>
+                            <td><span class="badge-danger">RIESGO</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 6: NOF (CHANGED TO OTHER VISUALS) -->
+            <div class="tab-pane fade" id="nof" role="tabpanel">
+                <h2>🔄 ANÁLISIS DE NECESIDADES OPERATIVAS DE FONDOS (NOF)</h2>
+                
+                <!-- NOF Metrics Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="nof-metric">
+                            <div class="nof-metric-label">NOF ACTUAL</div>
+                            <div class="nof-metric-value">42,35 M€</div>
+                            <div class="nof-metric-detail">42% del activo total</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="nof-metric" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            <div class="nof-metric-label">NOF PRESUPUESTO</div>
+                            <div class="nof-metric-value">33,32 M€</div>
+                            <div class="nof-metric-detail">Objetivo del periodo</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="nof-metric" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+                            <div class="nof-metric-label">DESVIACIÓN</div>
+                            <div class="nof-metric-value">+9,03 M€</div>
+                            <div class="nof-metric-detail">27% sobre objetivo</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="nof-metric" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                            <div class="nof-metric-label">VARIACIÓN Q2</div>
+                            <div class="nof-metric-value">+8,05 M€</div>
+                            <div class="nof-metric-detail">Incremento trimestral</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Composición de NOF -->
+                <h3>Composición y Evolución de NOF</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <canvas id="nofChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <canvas id="nofEvolutionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Periodo</th>
+                            <th>Existencias</th>
+                            <th>Deudores</th>
+                            <th>Acreedores</th>
+                            <th>NOF Total</th>
+                            <th>Variación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jun 2024</td>
+                            <td>48,66 M€</td>
+                            <td>21,92 M€</td>
+                            <td>-28,75 M€</td>
+                            <td>41,84 M€</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Mar 2025</td>
+                            <td>45,22 M€</td>
+                            <td>21,08 M€</td>
+                            <td>-32,00 M€</td>
+                            <td>34,30 M€</td>
+                            <td class="negative">-7,54 M€</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Jun 2025</strong></td>
+                            <td><strong>60,38 M€</strong></td>
+                            <td><strong>21,72 M€</strong></td>
+                            <td><strong>-39,86 M€</strong></td>
+                            <td><strong>42,35 M€</strong></td>
+                            <td class="negative"><strong>+8,05 M€</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Presupuesto Jun 2025</td>
+                            <td>44,11 M€</td>
+                            <td>21,48 M€</td>
+                            <td>-32,26 M€</td>
+                            <td>33,32 M€</td>
+                            <td class="positive">-9,03 M€</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Análisis de Sensibilidad -->
+                <h3>Análisis de Sensibilidad - Palancas de Mejora</h3>
+                <div class="chart-container">
+                    <canvas id="sensibilidadChart"></canvas>
+                </div>
+
+                <div class="alert-custom alert-info">
+                    <span class="alert-icon">💡</span>
+                    <div>
+                        <strong>OPORTUNIDADES DE LIBERACIÓN DE CAJA:</strong><br><br>
+                        
+                        <table class="table-custom" style="margin: 10px 0;">
+                            <thead>
+                                <tr>
+                                    <th>Palanca</th>
+                                    <th>Acción</th>
+                                    <th>Impacto</th>
+                                    <th>Prioridad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Reducir PMA</td>
+                                    <td>-10 días en inventario</td>
+                                    <td class="positive">+3,73 M€</td>
+                                    <td><span class="badge-danger">ALTA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Reducir PMC</td>
+                                    <td>-5 días en cobros</td>
+                                    <td class="positive">+2,31 M€</td>
+                                    <td><span class="badge-warning">MEDIA</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Aumentar PMP</td>
+                                    <td>+10 días en pagos</td>
+                                    <td class="positive">+3,73 M€</td>
+                                    <td><span class="badge-info">BAJA</span></td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td colspan="2"><strong>POTENCIAL TOTAL COMBINADO</strong></td>
+                                    <td class="positive"><strong>+8,65 M€</strong></td>
+                                    <td><strong>95% del gap</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 7: Conclusiones -->
+            <div class="tab-pane fade" id="conclusiones" role="tabpanel">
+                <h2>✅ CONCLUSIONES Y PLAN DE ACCIÓN</h2>
+                
+                <!-- Resumen Ejecutivo -->
+                <div class="alert-custom alert-info">
+                    <span class="alert-icon">📊</span>
+                    <div>
+                        <strong>DIAGNÓSTICO GENERAL:</strong><br>
+                        Trivium muestra señales mixtas en junio 2025. Si bien ha logrado recuperar la rentabilidad tras un Q1 negativo y el EBITDA supera las previsiones, persisten desafíos estructurales significativos en gestión de inventarios, liquidez y estructura financiera que requieren atención inmediata.
+                    </div>
+                </div>
+
+                <!-- Fortalezas -->
+                <div class="alert-custom alert-success">
+                    <span class="alert-icon">✅</span>
+                    <div>
+                        <strong>FORTALEZAS IDENTIFICADAS:</strong><br>
+                        • Recuperación operativa: EBITDA 2,55 M€ (+400% vs Q1)<br>
+                        • Gestión de cobros eficiente: PMC 39 días (mejor que sector)<br>
+                        • Free Cash Flow positivo: 9,2 M€<br>
+                        • Mejora en rotación de activos: 0,84x vs 0,73x en 2024<br>
+                        • Control de gastos financieros mejor que presupuesto
+                    </div>
+                </div>
+
+                <!-- Debilidades -->
+                <div class="alert-custom alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>ÁREAS DE MEJORA:</strong><br>
+                        • Inventarios excesivos: 60,4 M€ (60% del activo total)<br>
+                        • Margen neto insuficiente: 2,2% vs 11,3% objetivo<br>
+                        • NOF elevada: 42,35 M€ (+27% sobre presupuesto)<br>
+                        • Rentabilidad deteriorada: ROA 1,85%, ROE 6,09%<br>
+                        • Estructura de capital débil: Equity 30,4% vs 38% objetivo
+                    </div>
+                </div>
+
+                <!-- Riesgos -->
+                <div class="alert-custom alert-danger">
+                    <span class="alert-icon">🔴</span>
+                    <div>
+                        <strong>RIESGOS CRÍTICOS A GESTIONAR:</strong><br>
+                        • <strong>Liquidez crítica:</strong> Tesorería 0,32 M€ (mínimo operativo 2 M€)<br>
+                        • <strong>Riesgo de insolvencia:</strong> Z-Altman 2,16 en zona gris<br>
+                        • <strong>Sobreapalancamiento:</strong> Deuda neta 69,5 M€ con predominio CP<br>
+                        • <strong>Cash flow operativo negativo:</strong> -0,27 M€<br>
+                        • <strong>Dependencia bancaria:</strong> Financiación vía deuda nueva +4,23 M€
+                    </div>
+                </div>
+
+                <!-- Plan de Acción -->
+                <h3>Plan de Acción Prioritario - Q3/Q4 2025</h3>
+                
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Prioridad</th>
+                            <th>Área</th>
+                            <th>Acción</th>
+                            <th>Objetivo</th>
+                            <th>Plazo</th>
+                            <th>Impacto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #ffebee;">
+                            <td><span class="badge-danger">CRÍTICA</span></td>
+                            <td><strong>Liquidez</strong></td>
+                            <td>Plan emergencia tesorería</td>
+                            <td>Alcanzar 2 M€ mínimo</td>
+                            <td>30 días</td>
+                            <td>Supervivencia</td>
+                        </tr>
+                        <tr style="background: #ffebee;">
+                            <td><span class="badge-danger">CRÍTICA</span></td>
+                            <td><strong>Inventarios</strong></td>
+                            <td>Liquidación stock obsoleto</td>
+                            <td>Reducir 10 M€</td>
+                            <td>60 días</td>
+                            <td>+10 M€ caja</td>
+                        </tr>
+                        <tr style="background: #ffebee;">
+                            <td><span class="badge-danger">CRÍTICA</span></td>
+                            <td><strong>Financiación</strong></td>
+                            <td>Reestructurar deuda CP a LP</td>
+                            <td>Convertir 15 M€</td>
+                            <td>90 días</td>
+                            <td>Estabilidad</td>
+                        </tr>
+                        <tr style="background: #fff8e1;">
+                            <td><span class="badge-warning">ALTA</span></td>
+                            <td><strong>NOF</strong></td>
+                            <td>Optimizar ciclo operativo</td>
+                            <td>-8,65 M€ NOF</td>
+                            <td>90 días</td>
+                            <td>+8,65 M€ caja</td>
+                        </tr>
+                        <tr style="background: #fff8e1;">
+                            <td><span class="badge-warning">ALTA</span></td>
+                            <td><strong>Márgenes</strong></td>
+                            <td>Plan mejora rentabilidad</td>
+                            <td>Margen neto 5%</td>
+                            <td>120 días</td>
+                            <td>+2,5 M€ resultado</td>
+                        </tr>
+                        <tr style="background: #fff8e1;">
+                            <td><span class="badge-warning">ALTA</span></td>
+                            <td><strong>Z-Score</strong></td>
+                            <td>Reforzar solvencia</td>
+                            <td>Z-Score >2,6</td>
+                            <td>120 días</td>
+                            <td>Menor riesgo</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><span class="badge-info">MEDIA</span></td>
+                            <td><strong>Cobros</strong></td>
+                            <td>Mantener PMC <40 días</td>
+                            <td>35 días</td>
+                            <td>Continuo</td>
+                            <td>Liquidez</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><span class="badge-info">MEDIA</span></td>
+                            <td><strong>CAPEX</strong></td>
+                            <td>Congelar inversiones no críticas</td>
+                            <td>Reducir 50%</td>
+                            <td>Inmediato</td>
+                            <td>+1,5 M€ caja</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- KPIs Objetivo Q3 -->
+                <h3>Objetivos Clave Q3 2025</h3>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="kpi-card">
+                            <div class="kpi-title">Tesorería Mínima</div>
+                            <div class="kpi-value">>2,0 M€</div>
+                            <div class="kpi-change">
+                                <span class="negative">Actual: 0,32 M€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="kpi-card">
+                            <div class="kpi-title">Z-Altman Score</div>
+                            <div class="kpi-value">>2,60</div>
+                            <div class="kpi-change">
+                                <span class="negative">Actual: 2,16</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="kpi-card">
+                            <div class="kpi-title">PMA (días)</div>
+                            <div class="kpi-value"><130</div>
+                            <div class="kpi-change">
+                                <span class="negative">Actual: 142</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="kpi-card">
+                            <div class="kpi-title">Margen Neto</div>
+                            <div class="kpi-value">>5%</div>
+                            <div class="kpi-change">
+                                <span class="negative">Actual: 2,2%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recomendación Final -->
+                <div class="alert-custom alert-info" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none;">
+                    <span class="alert-icon">🎯</span>
+                    <div>
+                        <strong>RECOMENDACIÓN DEL CONSEJO:</strong><br><br>
+                        La situación requiere <strong>ACCIÓN INMEDIATA</strong> en tres frentes críticos:<br><br>
+                        
+                        1. <strong>EMERGENCIA LIQUIDEZ:</strong> Implementar plan de contingencia en 30 días para alcanzar 2 M€ de tesorería mínima operativa.<br><br>
+                        
+                        2. <strong>GESTIÓN INVENTARIOS:</strong> Programa agresivo de reducción de stock con objetivo -10 M€ en 60 días.<br><br>
+                        
+                        3. <strong>REESTRUCTURACIÓN FINANCIERA:</strong> Negociar con entidades bancarias la conversión de 15 M€ de deuda CP a LP.<br><br>
+                        
+                        El éxito en estos tres frentes determinará la viabilidad de la compañía en los próximos 6 meses.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 50px; padding-top: 30px; border-top: 2px solid #ecf0f1; color: #7f8c8d;">
+            <p>© 2025 Trivium Agronomía y Maquinaria S.L. | Dirección Financiera - Alfonso Llano Velarde</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Dynamic Summary Cards Script -->
+    <script>
+        function updateSummaryCards(tabId) {
+            const container = document.getElementById('dynamicSummaryCards');
+            let html = '<div class="row mb-4">';
+            
+            switch(tabId) {
+                case 'resumen':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Beneficio Neto</div>
+                                <div class="kpi-value">1,86 M€</div>
+                                <div class="kpi-change"><span class="positive">↑ Recuperación vs Q1</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">EBITDA</div>
+                                <div class="kpi-value">2,55 M€</div>
+                                <div class="kpi-change"><span class="positive">+400% vs Q1</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Z-Altman Score</div>
+                                <div class="kpi-value">2,16</div>
+                                <div class="kpi-change"><span class="negative">⚠️ Zona Gris</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Deuda Neta</div>
+                                <div class="kpi-value">69,5 M€</div>
+                                <div class="kpi-change"><span class="negative">+34% vs Q1</span></div>
+                            </div>
+                        </div>`;
+                    break;
+                    
+                case 'resultados':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Ventas</div>
+                                <div class="kpi-value">84,17 M€</div>
+                                <div class="kpi-change">Semestre 2025</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">EBITDA</div>
+                                <div class="kpi-value">2,55 M€</div>
+                                <div class="kpi-change"><span class="positive">+9% vs Ppto</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">EBIT</div>
+                                <div class="kpi-value">1,50 M€</div>
+                                <div class="kpi-change"><span class="negative">-15% vs 2024</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Margen Neto</div>
+                                <div class="kpi-value">2,2%</div>
+                                <div class="kpi-change"><span class="negative">vs 11,3% Objetivo</span></div>
+                            </div>
+                        </div>`;
+                    break;
+                    
+                case 'balance':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Activo Total</div>
+                                <div class="kpi-value">100,3 M€</div>
+                                <div class="kpi-change">+22% vs Q1</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Inventarios</div>
+                                <div class="kpi-value">60,4 M€</div>
+                                <div class="kpi-change"><span class="negative">+33% vs Q1</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Patrimonio Neto</div>
+                                <div class="kpi-value">30,5 M€</div>
+                                <div class="kpi-change">30,4% del Total</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Pasivo Corriente</div>
+                                <div class="kpi-value">62,0 M€</div>
+                                <div class="kpi-change"><span class="negative">61,8% del Total</span></div>
+                            </div>
+                        </div>`;
+                    break;
+                    
+                case 'flujos':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">CF Operativo</div>
+                                <div class="kpi-value">-0,27 M€</div>
+                                <div class="kpi-change"><span class="negative">Negativo</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">CF Inversión</div>
+                                <div class="kpi-value">-2,73 M€</div>
+                                <div class="kpi-change">CAPEX</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">CF Financiación</div>
+                                <div class="kpi-value">+4,23 M€</div>
+                                <div class="kpi-change"><span class="negative">Nueva Deuda</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Tesorería Final</div>
+                                <div class="kpi-value">0,32 M€</div>
+                                <div class="kpi-change"><span class="negative">⚠️ Crítico</span></div>
+                            </div>
+                        </div>`;
+                    break;
+                    
+                case 'ratios':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">ROA</div>
+                                <div class="kpi-value">1,85%</div>
+                                <div class="kpi-change"><span class="negative">vs 2,65% en 2024</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">ROE</div>
+                                <div class="kpi-value">6,09%</div>
+                                <div class="kpi-change"><span class="negative">vs 8,45% en 2024</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Z-Altman</div>
+                                <div class="kpi-value">2,16</div>
+                                <div class="kpi-change"><span class="negative">Zona Gris</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Cobertura Intereses</div>
+                                <div class="kpi-value">4,2x</div>
+                                <div class="kpi-change"><span class="neutral">vs 5,2x Objetivo</span></div>
+                            </div>
+                        </div>`;
+                    break;
+                    
+                case 'nof':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">NOF Actual</div>
+                                <div class="kpi-value">42,35 M€</div>
+                                <div class="kpi-change">42% del Activo</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Desviación</div>
+                                <div class="kpi-value">+9,03 M€</div>
+                                <div class="kpi-change"><span class="negative">+27% vs Ppto</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Existencias</div>
+                                <div class="kpi-value">60,38 M€</div>
+                                <div class="kpi-change"><span class="negative">Principal driver</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Potencial Liberación</div>
+                                <div class="kpi-value">8,65 M€</div>
+                                <div class="kpi-change"><span class="positive">Con optimización</span></div>
+                            </div>
+                        </div>`;
+                    break;
+                    
+                case 'conclusiones':
+                    html += `
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Acciones Críticas</div>
+                                <div class="kpi-value">3</div>
+                                <div class="kpi-change"><span class="negative">Urgentes</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Objetivo Tesorería</div>
+                                <div class="kpi-value">>2 M€</div>
+                                <div class="kpi-change"><span class="negative">En 30 días</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Reducción Stock</div>
+                                <div class="kpi-value">-10 M€</div>
+                                <div class="kpi-change"><span class="neutral">En 60 días</span></div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Reestructuración</div>
+                                <div class="kpi-value">15 M€</div>
+                                <div class="kpi-change"><span class="neutral">CP a LP</span></div>
+                            </div>
+                        </div>`;
+                    break;
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+    </script>
+    
+    <!-- Gauge Drawing Script -->
+    <script>
+        // Función para dibujar gauge
+        function drawGauge(canvasId, value, min, max, guideValue, options = {}) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 120;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height - 20;
+            const radius = 70;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Background arc
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, 0, false);
+            ctx.lineWidth = 15;
+            ctx.strokeStyle = '#ecf0f1';
+            ctx.stroke();
+            
+            // Value calculation
+            let numericValue = parseFloat(value);
+            if (isNaN(numericValue)) numericValue = 0;
+            
+            const percentage = Math.min(Math.max((numericValue - min) / (max - min), 0), 1);
+            const angle = Math.PI + (Math.PI * percentage);
+            
+            // Color determination
+            let color = '#f39c12';
+            if (options.forceRed) {
+                color = '#e74c3c';
+            } else if (options.forceGreen) {
+                color = '#27ae60';
+            } else if (options.invertedColors) {
+                if (numericValue <= guideValue) {
+                    color = '#27ae60';
+                } else if (numericValue > guideValue * 1.2) {
+                    color = '#e74c3c';
+                }
+            } else {
+                if (numericValue >= guideValue) {
+                    color = '#27ae60';
+                } else if (numericValue < guideValue * 0.5) {
+                    color = '#e74c3c';
+                }
+            }
+            
+            // Value arc
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, Math.PI, angle, false);
+            ctx.lineWidth = 15;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+            
+            // Guide marker
+            if (guideValue !== null && guideValue !== undefined) {
+                const guidePercentage = Math.min(Math.max((guideValue - min) / (max - min), 0), 1);
+                const guideAngle = Math.PI + (Math.PI * guidePercentage);
+                
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(guideAngle);
+                ctx.beginPath();
+                ctx.moveTo(radius - 20, 0);
+                ctx.lineTo(radius + 10, 0);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#e74c3c';
+                ctx.stroke();
+                ctx.restore();
+            }
+            
+            // Scale markers
+            for (let i = 0; i <= 4; i++) {
+                const markerAngle = Math.PI + (Math.PI * i / 4);
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(markerAngle);
+                ctx.beginPath();
+                ctx.moveTo(radius - 10, 0);
+                ctx.lineTo(radius - 5, 0);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = '#95a5a6';
+                ctx.stroke();
+                ctx.restore();
+            }
+            
+            // Labels
+            ctx.font = '10px Arial';
+            ctx.fillStyle = '#7f8c8d';
+            ctx.textAlign = 'left';
+            ctx.fillText(min, centerX - radius - 15, centerY + 5);
+            ctx.textAlign = 'right';
+            ctx.fillText(max, centerX + radius + 15, centerY + 5);
+        }
+        
+        // Initialize gauges
+        function initializeTabGauges(tabId) {
+            switch(tabId) {
+                case 'resumen':
+                    drawGauge('gauge1', 30.4, 0, 50, 38);
+                    drawGauge('gauge2', 2.2, 0, 15, 11.3);
+                    drawGauge('gauge3', 1.85, 0, 5, 2.65);
+                    drawGauge('gauge4', 6.09, 0, 15, 8.45);
+                    drawGauge('gauge5', 0.84, 0, 2, 1.5);
+                    drawGauge('gauge6', 92, 0, 200, 95, {invertedColors: true});
+                    drawGauge('gauge7', 4.2, 0, 10, 5.2);
+                    drawGauge('gauge8', 0.32, 0, 5, 2);
+                    
+                    // Evolution chart
+                    const evolutionCtx = document.getElementById('evolutionChart');
+                    if (evolutionCtx && !evolutionCtx.chart) {
+                        evolutionCtx.chart = new Chart(evolutionCtx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: ['Dic 2023', 'Jun 2024', 'Dic 2024', 'Mar 2025', 'Jun 2025'],
+                                datasets: [
+                                    {
+                                        label: 'EBITDA (M€)',
+                                        data: [3.0, 2.74, 3.90, 0.51, 2.55],
+                                        borderColor: '#667eea',
+                                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                        tension: 0.4
+                                    },
+                                    {
+                                        label: 'Beneficio Neto (M€)',
+                                        data: [2.5, 2.24, 2.45, -0.22, 1.86],
+                                        borderColor: '#764ba2',
+                                        backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                                        tension: 0.4
+                                    },
+                                    {
+                                        label: 'Z-Altman Score',
+                                        data: [3.05, 2.67, 3.90, 2.45, 2.16],
+                                        borderColor: '#f39c12',
+                                        backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                                        tension: 0.4,
+                                        yAxisID: 'y1'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    datalabels: {
+                                        display: true,
+                                        align: 'top',
+                                        color: '#333',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 10
+                                        },
+                                        formatter: (value) => value.toFixed(2)
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'left',
+                                        title: { display: true, text: 'Millones €' }
+                                    },
+                                    y1: {
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'right',
+                                        title: { display: true, text: 'Z-Score' },
+                                        grid: { drawOnChartArea: false }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'resultados':
+                    drawGauge('res1', 22, 0, 40, 25);
+                    drawGauge('res2', 3.0, 0, 10, 5);
+                    drawGauge('res3', 1.8, 0, 10, 5);
+                    drawGauge('res4', 0.36, 0, 1, 0.73, {forceGreen: true}); // Fixed: positive scale, green because better than budget
+                    
+                    // Results chart
+                    const resultadosCtx = document.getElementById('resultadosChart');
+                    if (resultadosCtx && !resultadosCtx.chart) {
+                        resultadosCtx.chart = new Chart(resultadosCtx.getContext('2d'), {
+                            type: 'bar',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['EBITDA', 'EBIT', 'Resultado Financiero', 'Beneficio Neto'],
+                                datasets: [
+                                    {
+                                        label: 'Jun 2025',
+                                        data: [2.55, 1.50, -0.36, 1.86],
+                                        backgroundColor: ['#667eea', '#764ba2', '#e74c3c', '#27ae60']
+                                    },
+                                    {
+                                        label: 'Presupuesto',
+                                        data: [2.34, null, -0.73, 2.12],
+                                        backgroundColor: 'rgba(200, 200, 200, 0.5)'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    datalabels: {
+                                        display: true,
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold'
+                                        },
+                                        formatter: (value) => value ? value.toFixed(2) + ' M€' : ''
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: { display: true, text: 'Millones €' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'balance':
+                    drawGauge('bal1', 60.4, 0, 80, 45, {forceRed: true}); // Fixed: red for excessive
+                    drawGauge('bal2', 21.7, 0, 40, 22);
+                    drawGauge('bal3', 82.8, 0, 120, 70, {forceRed: true}); // Fixed: red for high
+                    drawGauge('bal4', 62.0, 0, 100, 50, {forceRed: true}); // Fixed: red for elevated
+                    
+                    // Balance chart - Activo
+                    const balanceCtx = document.getElementById('balanceChart');
+                    if (balanceCtx && !balanceCtx.chart) {
+                        balanceCtx.chart = new Chart(balanceCtx.getContext('2d'), {
+                            type: 'doughnut',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['Inventarios', 'Cuentas a Cobrar', 'Tesorería', 'Activo No Corriente'],
+                                datasets: [{
+                                    data: [60.4, 21.7, 0.3, 17.9],
+                                    backgroundColor: ['#667eea', '#764ba2', '#f39c12', '#27ae60']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Composición del Activo'
+                                    },
+                                    datalabels: {
+                                        display: true,
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 12
+                                        },
+                                        formatter: (value, context) => {
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return value + ' M€\n' + percentage + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Balance chart - Pasivo
+                    const pasivoCtx = document.getElementById('pasivoChart');
+                    if (pasivoCtx && !pasivoCtx.chart) {
+                        pasivoCtx.chart = new Chart(pasivoCtx.getContext('2d'), {
+                            type: 'doughnut',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['Patrimonio Neto', 'Pasivo No Corriente', 'Pasivo Corriente'],
+                                datasets: [{
+                                    data: [30.5, 7.8, 62.0],
+                                    backgroundColor: ['#27ae60', '#f39c12', '#e74c3c']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Estructura de Financiación'
+                                    },
+                                    datalabels: {
+                                        display: true,
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 12
+                                        },
+                                        formatter: (value, context) => {
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return value + ' M€\n' + percentage + '%';
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'flujos':
+                    drawGauge('cf1', 0.27, 0, 5, 0, {forceRed: true}); // Fixed: red for negative (shown as positive for gauge)
+                    drawGauge('cf2', 2.73, 0, 5, 2); // Fixed: normal scale for investment
+                    drawGauge('cf3', 4.23, 0, 10, 0, {forceRed: true}); // Fixed: red for debt financing
+                    drawGauge('cf4', 9.2, 0, 15, 5, {forceGreen: true}); // Green for positive FCF
+                    drawGauge('wc1', 39, 0, 90, 35, {invertedColors: true});
+                    drawGauge('wc2', 142, 0, 250, 130, {invertedColors: true});
+                    drawGauge('wc3', 89, 0, 150, 75, {invertedColors: true});
+                    drawGauge('wc4', 92, 0, 200, 95, {invertedColors: true});
+                    break;
+                    
+                case 'ratios':
+                    drawGauge('rat1', 1.85, 0, 5, 3);
+                    drawGauge('rat2', 6.09, 0, 15, 10);
+                    drawGauge('rat3', 2.48, 0, 10, 5);
+                    drawGauge('rat4', 15.3, -10, 30, 10);
+                    
+                    // Rentabilidad evolution chart
+                    const rentabilidadCtx = document.getElementById('rentabilidadChart');
+                    if (rentabilidadCtx && !rentabilidadCtx.chart) {
+                        rentabilidadCtx.chart = new Chart(rentabilidadCtx.getContext('2d'), {
+                            type: 'bar',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['ROA', 'ROE', 'ROCE', 'ROIC', 'Cash ROCE'],
+                                datasets: [
+                                    {
+                                        label: 'Jun 2025',
+                                        data: [1.85, 6.09, 2.48, 1.86, 15.3],
+                                        backgroundColor: '#667eea'
+                                    },
+                                    {
+                                        label: 'Jun 2024',
+                                        data: [2.65, 8.45, 3.17, 2.38, null],
+                                        backgroundColor: '#764ba2'
+                                    },
+                                    {
+                                        label: 'Benchmark',
+                                        data: [3, 10, 5, 4, 10],
+                                        backgroundColor: 'rgba(200, 200, 200, 0.5)'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    datalabels: {
+                                        display: true,
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 10
+                                        },
+                                        formatter: (value) => value ? value.toFixed(1) + '%' : ''
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: { display: true, text: 'Porcentaje (%)' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Z-Score chart with bands
+                    const zscoreCtx = document.getElementById('zscoreChart');
+                    if (zscoreCtx && !zscoreCtx.chart) {
+                        zscoreCtx.chart = new Chart(zscoreCtx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: ['Dic 2023', 'Jun 2024', 'Dic 2024', 'Mar 2025', 'Jun 2025', 'Objetivo'],
+                                datasets: [
+                                    {
+                                        label: 'Zona Segura',
+                                        data: [4.5, 4.5, 4.5, 4.5, 4.5, 4.5],
+                                        backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                                        borderColor: 'transparent',
+                                        fill: '+1',
+                                        pointRadius: 0
+                                    },
+                                    {
+                                        label: 'Límite Superior',
+                                        data: [3, 3, 3, 3, 3, 3],
+                                        borderColor: '#27ae60',
+                                        borderDash: [5, 5],
+                                        fill: false,
+                                        pointRadius: 0
+                                    },
+                                    {
+                                        label: 'Zona Gris',
+                                        data: [3, 3, 3, 3, 3, 3],
+                                        backgroundColor: 'rgba(243, 156, 18, 0.2)',
+                                        borderColor: 'transparent',
+                                        fill: '+1',
+                                        pointRadius: 0
+                                    },
+                                    {
+                                        label: 'Límite Inferior',
+                                        data: [2, 2, 2, 2, 2, 2],
+                                        borderColor: '#f39c12',
+                                        borderDash: [5, 5],
+                                        fill: false,
+                                        pointRadius: 0
+                                    },
+                                    {
+                                        label: 'Zona Riesgo',
+                                        data: [2, 2, 2, 2, 2, 2],
+                                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                                        borderColor: 'transparent',
+                                        fill: 'origin',
+                                        pointRadius: 0
+                                    },
+                                    {
+                                        label: 'Z-Score Trivium',
+                                        data: [3.05, 2.67, 3.90, 2.45, 2.16, 2.83],
+                                        borderColor: '#2c3e50',
+                                        backgroundColor: 'transparent',
+                                        borderWidth: 3,
+                                        fill: false,
+                                        tension: 0.4,
+                                        pointRadius: 5,
+                                        pointBackgroundColor: '#2c3e50'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    datalabels: {
+                                        display: function(context) {
+                                            return context.datasetIndex === 5; // Only show for main Z-Score line
+                                        },
+                                        align: 'top',
+                                        color: '#2c3e50',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 11
+                                        },
+                                        formatter: (value) => value.toFixed(2)
+                                    },
+                                    legend: {
+                                        display: true,
+                                        labels: {
+                                            filter: function(item) {
+                                                return item.text === 'Z-Score Trivium' || 
+                                                       item.text === 'Zona Segura' || 
+                                                       item.text === 'Zona Gris' || 
+                                                       item.text === 'Zona Riesgo';
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        min: 0,
+                                        max: 4.5,
+                                        title: { display: true, text: 'Z-Score' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'nof':
+                    // NOF composition chart
+                    const nofCtx = document.getElementById('nofChart');
+                    if (nofCtx && !nofCtx.chart) {
+                        nofCtx.chart = new Chart(nofCtx.getContext('2d'), {
+                            type: 'bar',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['Existencias', 'Deudores', 'Acreedores', 'NOF Total'],
+                                datasets: [
+                                    {
+                                        label: 'Jun 2025',
+                                        data: [60.38, 21.72, -39.86, 42.35],
+                                        backgroundColor: ['#667eea', '#764ba2', '#e74c3c', '#27ae60']
+                                    },
+                                    {
+                                        label: 'Presupuesto',
+                                        data: [44.11, 21.48, -32.26, 33.32],
+                                        backgroundColor: 'rgba(200, 200, 200, 0.5)'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Composición NOF vs Presupuesto'
+                                    },
+                                    datalabels: {
+                                        display: true,
+                                        color: function(context) {
+                                            const value = context.dataset.data[context.dataIndex];
+                                            return value < 0 ? 'white' : 'white';
+                                        },
+                                        font: {
+                                            weight: 'bold'
+                                        },
+                                        formatter: (value) => value.toFixed(1) + ' M€'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        title: { display: true, text: 'Millones €' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // NOF evolution chart
+                    const nofEvolutionCtx = document.getElementById('nofEvolutionChart');
+                    if (nofEvolutionCtx && !nofEvolutionCtx.chart) {
+                        nofEvolutionCtx.chart = new Chart(nofEvolutionCtx.getContext('2d'), {
+                            type: 'line',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['Jun 2024', 'Sep 2024', 'Dic 2024', 'Mar 2025', 'Jun 2025'],
+                                datasets: [{
+                                    label: 'NOF Total',
+                                    data: [41.84, 38.5, 36.2, 34.30, 42.35],
+                                    borderColor: '#667eea',
+                                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Evolución NOF (últimos 12 meses)'
+                                    },
+                                    datalabels: {
+                                        display: true,
+                                        align: 'top',
+                                        color: '#333',
+                                        font: {
+                                            weight: 'bold'
+                                        },
+                                        formatter: (value) => value.toFixed(1) + ' M€'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: false,
+                                        title: { display: true, text: 'Millones €' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Sensibilidad chart
+                    const sensibilidadCtx = document.getElementById('sensibilidadChart');
+                    if (sensibilidadCtx && !sensibilidadCtx.chart) {
+                        sensibilidadCtx.chart = new Chart(sensibilidadCtx.getContext('2d'), {
+                            type: 'bar',
+                            plugins: [ChartDataLabels],
+                            data: {
+                                labels: ['Reducir PMA -10 días', 'Reducir PMC -5 días', 'Aumentar PMP +10 días', 'Total Combinado'],
+                                datasets: [{
+                                    label: 'Liberación de Caja (M€)',
+                                    data: [3.73, 2.31, 3.73, 8.65],
+                                    backgroundColor: ['#27ae60', '#3498db', '#f39c12', '#667eea']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Palancas de Optimización NOF'
+                                    },
+                                    datalabels: {
+                                        display: true,
+                                        color: 'white',
+                                        font: {
+                                            weight: 'bold',
+                                            size: 14
+                                        },
+                                        formatter: (value) => '+' + value.toFixed(2) + ' M€'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: { display: true, text: 'Millones € liberados' }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+            }
+        }
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            updateSummaryCards('resumen');
+            initializeTabGauges('resumen');
+            
+            const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabButtons.forEach(button => {
+                button.addEventListener('shown.bs.tab', function(e) {
+                    const targetId = e.target.getAttribute('data-bs-target').replace('#', '');
+                    updateSummaryCards(targetId);
+                    setTimeout(() => initializeTabGauges(targetId), 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+ThinkingThoughts
+(experimental)
+Auto
+Expand to view model thoughts
+
+chevron_right
