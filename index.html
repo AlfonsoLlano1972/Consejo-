@@ -1,1 +1,168 @@
-prueba
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portal de Documentos · Trivium</title>
+<meta name="description" content="Portal centralizado de informes PDF, HTML y audios de Trivium." />
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --brand:#0ea5e9; --brand-2:#22c55e; --ring:#93c5fd;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --brand:#38bdf8; --brand-2:#34d399; --ring:#2563eb; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+  header{
+    position:relative; padding:56px 20px; overflow:hidden;
+    background:
+      radial-gradient(1200px 400px at 10% -10%, rgba(14,165,233,.20), transparent 60%),
+      radial-gradient(900px 300px at 110% -10%, rgba(34,197,94,.18), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.00), rgba(0,0,0,0.02));
+    border-bottom:1px solid rgba(148,163,184,.18);
+  }
+  .container{max-width:1100px;margin:0 auto;padding:0 20px}
+  h1{margin:0 0 8px;font-size:clamp(28px,3.2vw,40px);letter-spacing:.2px}
+  .lead{margin:0;color:var(--muted);font-size:clamp(14px,1.6vw,16px)}
+  .toolbar{display:grid;grid-template-columns:1fr 180px 180px;gap:12px; margin:26px 0 0;}
+  .input, .select{width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(148,163,184,.35);
+    outline:0; background:var(--card); color:var(--text)}
+  .input:focus, .select:focus{ box-shadow:0 0 0 3px var(--ring); border-color:transparent }
+  main{padding:26px 20px 60px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:980px){ .grid{grid-template-columns:repeat(2,1fr)} .toolbar{grid-template-columns:1fr 1fr 1fr} }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} .toolbar{grid-template-columns:1fr} }
+  .card{background:var(--card); border:1px solid rgba(148,163,184,.18); border-radius:16px; padding:18px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;}
+  .card:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(2,8,23,.15); border-color:rgba(148,163,184,.35) }
+  .card h3{margin:2px 0 6px;font-size:18px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:10px}
+  .badge{padding:2px 8px;border-radius:999px;border:1px solid rgba(148,163,184,.35);font-size:12px}
+  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .btn{appearance:none;border:0;cursor:pointer;padding:10px 12px;border-radius:12px;font-weight:600;
+    background:var(--brand); color:#001018; text-decoration:none; display:inline-flex; align-items:center; gap:8px;}
+  .btn.sec{ background:transparent; color:var(--text); border:1px dashed rgba(148,163,184,.35) }
+  .empty{text-align:center;color:var(--muted);padding:50px;border:1px dashed rgba(148,163,184,.35);border-radius:16px;background:var(--card)}
+  footer{color:var(--muted);text-align:center;padding:30px 12px}
+  .icon{width:18px;height:18px;display:inline-block;vertical-align:-3px}
+  audio{ width:100%; margin-top:10px; border-radius:10px; background:var(--card); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Portal de Documentos</h1>
+      <p class="lead">Acceso centralizado a PDFs, HTMLs y audios (GitHub Pages).</p>
+
+      <!-- Herramientas: búsqueda + filtros -->
+      <div class="toolbar">
+        <input id="q" class="input" placeholder="🔎 Buscar por título, etiquetas o tipo…" />
+        <select id="year" class="select">
+          <option value="">📅 Todos los años</option>
+        </select>
+        <select id="type" class="select">
+          <option value="">🗂️ Todos los tipos</option>
+          <option value="pdf">PDF</option>
+          <option value="html">HTML</option>
+          <option value="audio">Audio</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty" style="display:none">No hay resultados con los filtros aplicados.</div>
+  </main>
+
+  <footer>
+    © 2025 Alfonso Llano — Trivium
+  </footer>
+
+<script>
+/* === 1) LISTA DE RECURSOS ====================================================
+   Añade/edita elementos aquí. "type" debe ser: "pdf" | "html" | "audio".
+   "file" es la ruta relativa en el repo (raíz o subcarpeta).                */
+const items = [
+  // EJEMPLOS: cámbialos por tus ficheros reales
+  { title: "Informe Financiero — Junio 2025 (PDF)", file: "Informe económico financiero junio 2025.pdf", date: "2025-06-25", tags: ["pdf","finanzas","junio","2025"], type: "pdf" },
+
+  
+];
+
+/* === 2) UTILIDADES =========================================================== */
+const fmtDate = iso => new Date(iso).toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'2-digit' });
+const byDateDesc = (a,b) => new Date(b.date) - new Date(a.date);
+const iconFor = (type) => {
+  if(type === "pdf")   return "📄";
+  if(type === "html")  return "🌐";
+  if(type === "audio") return "🎧";
+  return "📦";
+};
+
+/* === 3) RELLENAR SELECTS ===================================================== */
+const years = [...new Set(items.map(r => new Date(r.date).getFullYear()))].sort((a,b)=>b-a);
+const yearSel = document.getElementById('year');
+years.forEach(y => { const o=document.createElement('option'); o.value=y; o.textContent=`📅 ${y}`; yearSel.appendChild(o); });
+
+/* === 4) RENDER =============================================================== */
+const grid  = document.getElementById('grid');
+const empty = document.getElementById('empty');
+const query = document.getElementById('q');
+const typeSel = document.getElementById('type');
+
+function render(){
+  const q = query.value.trim().toLowerCase();
+  const y = yearSel.value;
+  const t = typeSel.value;
+
+  const filtered = items
+    .filter(r => !y || new Date(r.date).getFullYear().toString() === y)
+    .filter(r => !t || r.type === t)
+    .filter(r => {
+      if(!q) return true;
+      const hay = [r.title, r.file, r.type, ...(r.tags||[])].join(' ').toLowerCase();
+      return hay.includes(q);
+    })
+    .sort(byDateDesc);
+
+  grid.innerHTML = '';
+  filtered.forEach(r => {
+    const isAudio = r.type === "audio";
+    const isPdf   = r.type === "pdf";
+    const isHtml  = r.type === "html";
+
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="meta">
+        <span class="badge">${new Date(r.date).getFullYear()}</span>
+        <span class="badge">${r.type.toUpperCase()}</span>
+        ${(r.tags||[]).slice(0,3).map(t=>`<span class="badge">${t}</span>`).join('')}
+      </div>
+      <h3>${iconFor(r.type)} ${r.title}</h3>
+      <div class="meta">Publicado: ${fmtDate(r.date)} · Archivo: ${r.file}</div>
+      ${
+        isAudio
+          ? `<audio controls preload="none"><source src="${r.file}" type="audio/${r.file.endsWith('.wav')?'wav':'mpeg'}" />Tu navegador no soporta audio HTML5.</audio>`
+          : `<div class="actions">
+               <a class="btn" href="${r.file}" target="_blank" rel="noopener">Abrir</a>
+               <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>
+             </div>`
+      }
+      ${isPdf ? `<div class="meta">Sugerencia: si el PDF no abre en el navegador, use “Descargar”.</div>` : ``}
+    `;
+    grid.appendChild(card);
+  });
+
+  empty.style.display = filtered.length ? 'none' : 'block';
+}
+query.addEventListener('input', render);
+yearSel.addEventListener('change', render);
+typeSel.addEventListener('change', render);
+render();
+</script>
+</body>
+</html>
+
