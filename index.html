@@ -83,17 +83,16 @@
 
 <script>
 /* === 1) LISTA DE RECURSOS ====================================================
-   Añade/edita elementos aquí. "type" debe ser: "pdf" | "html" | "audio".
+   "type": "pdf" | "html" | "audio" | "ppt"
    "file" es la ruta relativa en el repo (raíz o subcarpeta).                */
 const items = [
-  // EJEMPLOS: cámbialos por tus ficheros reales
   { title: "Informe Financiero — Junio 2025 (PDF)", file: "Informe_economico_financiero_junio_2025.pdf", date: "2025-06-25", tags: ["pdf","finanzas","junio","2025"], type: "pdf" },
   { title: "Podcast Resumen — Junio 2025", file: "podcast-junio-2025.mp3", date: "2025-06-19", tags: ["audio","podcast","junio","2025"], type: "audio" },
-  { title: "Dashboard Informe Financiero — Junio 2025", file: "Visualizacion_Informe_Financiero_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "HTML" },
-  { title: "Ratios DFA— Junio 2025", file: "Benchmarking_DFA_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "HTML" },
-  { title: "Comparativa DFA— Junio 2025", file: "DFA_Balance_Financiero_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "HTML" },
-  { title: "Comparativa Departamentos DFA— Junio 2025", file: "Comparativo_Departamentos_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025","Departamentos"], type: "HTML" },
-  { title: "Presentación Consejo— Junio 2025", file: "Consejo_02_septiembre_2025.pptx", date: "2025-06-19", tags: ["Dashboard","powerpoint","Informe","DFA","junio","2025","Departamentos"], type: "ppt" },
+  { title: "Dashboard Informe Financiero — Junio 2025", file: "Visualizacion_Informe_Financiero_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+  { title: "Ratios DFA— Junio 2025", file: "Benchmarking_DFA_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+  { title: "Comparativa DFA— Junio 2025", file: "DFA_Balance_Financiero_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+  { title: "Comparativa Departamentos DFA— Junio 2025", file: "Comparativo_Departamentos_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025","Departamentos"], type: "html" },
+  { title: "Presentación Consejo— Septiembre 2025", file: "Consejo_02_septiembre_2025.pptx", date: "2025-09-02", tags: ["ppt","consejo","septiembre","2025"], type: "ppt" },
 ];
 
 /* === 2) UTILIDADES =========================================================== */
@@ -103,6 +102,7 @@ const iconFor = (type) => {
   if(type === "pdf")   return "📄";
   if(type === "html")  return "🌐";
   if(type === "audio") return "🎧";
+  if(type === "ppt")   return "📊";
   return "📦";
 };
 
@@ -123,6 +123,8 @@ function render(){
   const t = typeSel.value;
 
   const filtered = items
+    // normalizamos type por si viene en mayúsculas
+    .map(r => ({ ...r, type: (r.type || "").toLowerCase() }))
     .filter(r => !y || new Date(r.date).getFullYear().toString() === y)
     .filter(r => !t || r.type === t)
     .filter(r => {
@@ -136,7 +138,7 @@ function render(){
   filtered.forEach(r => {
     const isAudio = r.type === "audio";
     const isPdf   = r.type === "pdf";
-    const isHtml  = r.type === "html";
+    const isPpt   = r.type === "ppt";
 
     const card = document.createElement('article');
     card.className = 'card';
@@ -152,8 +154,14 @@ function render(){
         isAudio
           ? `<audio controls preload="none"><source src="${r.file}" type="audio/${r.file.endsWith('.wav')?'wav':'mpeg'}" />Tu navegador no soporta audio HTML5.</audio>`
           : `<div class="actions">
-               <a class="btn" href="${r.file}" target="_blank" rel="noopener">Abrir</a>
-               <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>
+               ${
+                 isPpt
+                   // SOLO PPT: quitamos "Abrir" y dejamos "Descargar"
+                   ? `<a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
+                   // PDFs y HTMLs: Abrir + Descargar
+                   : `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Abrir</a>
+                      <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
+               }
              </div>`
       }
       ${isPdf ? `<div class="meta">Sugerencia: si el PDF no abre en el navegador, use “Descargar”.</div>` : ``}
