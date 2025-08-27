@@ -4,118 +4,182 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Portal de Documentos · Trivium</title>
+<meta name="description" content="Portal centralizado de informes PDF, HTML y audios de Trivium." />
 <style>
   :root{
-    --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
-    --brand:#0ea5e9; --ring:#93c5fd;
+    --bg:#f6f7fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --brand:#0ea5e9; --brand-2:#22c55e; --ring:#93c5fd;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8;
-           --brand:#38bdf8; --ring:#2563eb; }
+    :root{ --bg:#0b1220; --card:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --brand:#38bdf8; --brand-2:#34d399; --ring:#2563eb; }
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,Segoe UI,Roboto,Arial}
-  header{padding:40px 20px;text-align:center;border-bottom:1px solid rgba(148,163,184,.18)}
-  h1{margin:0;font-size:clamp(26px,3vw,38px)}
-  .lead{margin:8px 0;color:var(--muted)}
-  .toolbar{display:grid;grid-template-columns:1fr 160px 160px;gap:12px;max-width:900px;margin:20px auto}
-  .input,.select{padding:12px;border-radius:10px;border:1px solid rgba(148,163,184,.35);background:var(--card);color:var(--text)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:1100px;margin:30px auto;padding:0 20px}
-  .card{background:var(--card);border:1px solid rgba(148,163,184,.18);border-radius:14px;padding:16px;transition:.2s}
-  .card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.1)}
-  .card h3{margin:0 0 8px}
-  .meta{font-size:13px;color:var(--muted);margin-bottom:10px}
-  .badge{background:rgba(148,163,184,.15);padding:2px 8px;border-radius:8px;margin-right:6px;font-size:12px}
-  .actions{display:flex;gap:10px;flex-wrap:wrap}
-  .btn{padding:8px 12px;border-radius:10px;font-weight:600;text-decoration:none;cursor:pointer}
-  .btn{background:var(--brand);color:#001018}
-  .btn.sec{background:transparent;border:1px dashed rgba(148,163,184,.35);color:var(--text)}
-  audio,video{width:100%;margin-top:10px;border-radius:10px}
-  .video-embed{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin-top:10px}
-  .video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%}
-  footer{text-align:center;padding:20px;color:var(--muted)}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+  header{
+    position:relative; padding:56px 20px; overflow:hidden;
+    background:
+      radial-gradient(1200px 400px at 10% -10%, rgba(14,165,233,.20), transparent 60%),
+      radial-gradient(900px 300px at 110% -10%, rgba(34,197,94,.18), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.00), rgba(0,0,0,0.02));
+    border-bottom:1px solid rgba(148,163,184,.18);
+  }
+  .container{max-width:1100px;margin:0 auto;padding:0 20px}
+  h1{margin:0 0 8px;font-size:clamp(28px,3.2vw,40px);letter-spacing:.2px}
+  .lead{margin:0;color:var(--muted);font-size:clamp(14px,1.6vw,16px)}
+  .toolbar{display:grid;grid-template-columns:1fr 180px 180px;gap:12px; margin:26px 0 0;}
+  .input, .select{width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(148,163,184,.35);
+    outline:0; background:var(--card); color:var(--text)}
+  .input:focus, .select:focus{ box-shadow:0 0 0 3px var(--ring); border-color:transparent }
+  main{padding:26px 20px 60px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:980px){ .grid{grid-template-columns:repeat(2,1fr)} .toolbar{grid-template-columns:1fr 1fr 1fr} }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr} .toolbar{grid-template-columns:1fr} }
+  .card{background:var(--card); border:1px solid rgba(148,163,184,.18); border-radius:16px; padding:18px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;}
+  .card:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(2,8,23,.15); border-color:rgba(148,163,184,.35) }
+  .card h3{margin:2px 0 6px;font-size:18px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:10px}
+  .badge{padding:2px 8px;border-radius:999px;border:1px solid rgba(148,163,184,.35);font-size:12px}
+  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .btn{appearance:none;border:0;cursor:pointer;padding:10px 12px;border-radius:12px;font-weight:600;
+    background:var(--brand); color:#001018; text-decoration:none; display:inline-flex; align-items:center; gap:8px;}
+  .btn.sec{ background:transparent; color:var(--text); border:1px dashed rgba(148,163,184,.35) }
+  .empty{text-align:center;color:var(--muted);padding:50px;border:1px dashed rgba(148,163,184,.35);border-radius:16px;background:var(--card)}
+  footer{color:var(--muted);text-align:center;padding:30px 12px}
+  .icon{width:18px;height:18px;display:inline-block;vertical-align:-3px}
+  audio{ width:100%; margin-top:10px; border-radius:10px; background:var(--card); }
 </style>
 </head>
 <body>
   <header>
-    <h1>Portal de Documentos Trivium Agronomía y Maquinaria</h1>
-    <p class="lead">Acceso centralizado a documentos del Consejo</p>
-    <div class="toolbar">
-      <input id="q" class="input" placeholder="🔎 Buscar…" />
-      <select id="year" class="select"><option value="">📅 Todos los años</option></select>
-      <select id="type" class="select">
-        <option value="">🗂️ Todos los tipos</option>
-        <option value="pdf">PDF</option>
-        <option value="html">HTML</option>
-        <option value="audio">Audio</option>
-        <option value="ppt">PowerPoint</option>
-        <option value="video">Video</option>
-        <option value="vimeo">Vimeo</option>
-      </select>
+    <div class="container">
+      <h1>Portal de Documentos Trvium Agronomía y Maquinaría</h1>
+      <p class="lead">Acceso centralizado a documentos del Consejo.</p>
+
+      <!-- Herramientas: búsqueda + filtros -->
+      <div class="toolbar">
+        <input id="q" class="input" placeholder="🔎 Buscar por título, etiquetas o tipo…" />
+        <select id="year" class="select">
+          <option value="">📅 Todos los años</option>
+        </select>
+        <select id="type" class="select">
+          <option value="">🗂️ Todos los tipos</option>
+          <option value="pdf">PDF</option>
+          <option value="html">HTML</option>
+          <option value="audio">Audio</option>
+          <option value="ppt">Powerpoint</option>
+          <option value="vimeo">Vimeo</option> <!-- añadido -->
+        </select>
+      </div>
     </div>
   </header>
 
-  <main>
+  <main class="container">
     <div id="grid" class="grid"></div>
-    <div id="empty" style="display:none;text-align:center;color:var(--muted)">No hay resultados</div>
+    <div id="empty" class="empty" style="display:none">No hay resultados con los filtros aplicados.</div>
   </main>
 
-  <footer>© 2025 Alfonso Llano — Trivium</footer>
+  <footer>
+    © 2025 Alfonso Llano — Trivium
+  </footer>
 
 <script>
+/* === 1) LISTA DE RECURSOS ====================================================
+   "type": "pdf" | "html" | "audio" | "ppt" | "vimeo"
+   "file" es la ruta relativa en el repo (o URL si es Vimeo).                 */
 const items = [
-  { title:"Informe Financiero — Junio 2025 (PDF)", file:"Informe_economico_financiero_junio_2025.pdf", date:"2025-06-25", tags:["pdf","junio"], type:"pdf" },
-  { title:"Podcast Resumen — Junio 2025", file:"podcast-junio-2025.mp3", date:"2025-06-19", tags:["audio","junio"], type:"audio" },
-  { title:"Presentación Consejo — Septiembre 2025", file:"Consejo_02_septiembre_2025.pptx", date:"2025-09-02", tags:["ppt","consejo"], type:"ppt" },
-  { title:"Resumen Económico Financiero — Septiembre 2025", file:"https://player.vimeo.com/video/1113493999", date:"2025-09-05", tags:["video","vimeo","septiembre"], type:"vimeo" }
+  { title: "Informe Financiero — Junio 2025 (PDF)", file: "Informe_economico_financiero_junio_2025.pdf", date: "2025-06-25", tags: ["pdf","finanzas","junio","2025"], type: "pdf" },
+  { title: "Podcast Resumen — Junio 2025", file: "podcast-junio-2025.mp3", date: "2025-06-19", tags: ["audio","podcast","junio","2025"], type: "audio" },
+  { title: "Dashboard Informe Financiero — Junio 2025", file: "Visualizacion_Informe_Financiero_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+  { title: "Ratios DFA— Junio 2025", file: "Benchmarking_DFA_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+  { title: "Comparativa DFA— Junio 2025", file: "DFA_Balance_Financiero_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+  { title: "Comparativa Departamentos DFA— Junio 2025", file: "Comparativo_Departamentos_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025","Departamentos"], type: "html" },
+  { title: "Presentación Consejo— Septiembre 2025", file: "Consejo_02_septiembre_2025.pptx", date: "2025-09-02", tags: ["ppt","consejo","septiembre","2025"], type: "ppt" },
+
+  /* >>> NUEVO VIMEO: solo abre en Vimeo, no se reproduce aquí <<< */
+  { title: "Resumen Económico Financiero — Septiembre 2025", file: "https://vimeo.com/1113493999", date: "2025-09-05", tags: ["vimeo","video","septiembre","2025"], type: "vimeo" }
 ];
 
-const fmtDate = iso => new Date(iso).toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'2-digit'});
-const byDateDesc = (a,b)=>new Date(b.date)-new Date(a.date);
+/* === 2) UTILIDADES =========================================================== */
+const fmtDate = iso => new Date(iso).toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'2-digit' });
+const byDateDesc = (a,b) => new Date(b.date) - new Date(a.date);
+const iconFor = (type) => {
+  if(type === "pdf")   return "📄";
+  if(type === "html")  return "🌐";
+  if(type === "audio") return "🎧";
+  if(type === "ppt")   return "📊";
+  if(type === "vimeo") return "🎬";
+  return "📦";
+};
 
-const yearSel=document.getElementById('year');
-[...new Set(items.map(r=>new Date(r.date).getFullYear()))].sort((a,b)=>b-a)
-.forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=`📅 ${y}`;yearSel.appendChild(o);});
+/* === 3) RELLENAR SELECTS ===================================================== */
+const years = [...new Set(items.map(r => new Date(r.date).getFullYear()))].sort((a,b)=>b-a);
+const yearSel = document.getElementById('year');
+years.forEach(y => { const o=document.createElement('option'); o.value=y; o.textContent=`📅 ${y}`; yearSel.appendChild(o); });
 
-const grid=document.getElementById('grid'),empty=document.getElementById('empty'),query=document.getElementById('q'),typeSel=document.getElementById('type');
+/* === 4) RENDER =============================================================== */
+const grid  = document.getElementById('grid');
+const empty = document.getElementById('empty');
+const query = document.getElementById('q');
+const typeSel = document.getElementById('type');
 
 function render(){
-  const q=query.value.toLowerCase(),y=yearSel.value,t=typeSel.value;
-  const filtered=items.filter(r=>!y||new Date(r.date).getFullYear().toString()===y)
-    .filter(r=>!t||r.type===t)
-    .filter(r=>!q||[r.title,r.file,r.type,(r.tags||[]).join(" ")].join(" ").toLowerCase().includes(q))
+  const q = query.value.trim().toLowerCase();
+  const y = yearSel.value;
+  const t = typeSel.value;
+
+  const filtered = items
+    .map(r => ({ ...r, type: (r.type || "").toLowerCase() }))
+    .filter(r => !y || new Date(r.date).getFullYear().toString() === y)
+    .filter(r => !t || r.type === t)
+    .filter(r => {
+      if(!q) return true;
+      const hay = [r.title, r.file, r.type, ...(r.tags||[])].join(' ').toLowerCase();
+      return hay.includes(q);
+    })
     .sort(byDateDesc);
 
-  grid.innerHTML='';
-  filtered.forEach(r=>{
-    const isAudio=r.type==="audio",isVideo=r.type==="video",isVimeo=r.type==="vimeo",isPpt=r.type==="ppt";
-    const card=document.createElement('article');
-    card.className='card';
-    card.innerHTML=`
-      <div class="meta"><span class="badge">${new Date(r.date).getFullYear()}</span><span class="badge">${r.type.toUpperCase()}</span></div>
-      <h3>${r.title}</h3>
-      <div class="meta">Publicado: ${fmtDate(r.date)}</div>
+  grid.innerHTML = '';
+  filtered.forEach(r => {
+    const isAudio = r.type === "audio";
+    const isPdf   = r.type === "pdf";
+    const isPpt   = r.type === "ppt";
+    const isVimeo = r.type === "vimeo";
+
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="meta">
+        <span class="badge">${new Date(r.date).getFullYear()}</span>
+        <span class="badge">${r.type.toUpperCase()}</span>
+        ${(r.tags||[]).slice(0,3).map(t=>`<span class="badge">${t}</span>`).join('')}
+      </div>
+      <h3>${iconFor(r.type)} ${r.title}</h3>
+      <div class="meta">Publicado: ${fmtDate(r.date)}${!isVimeo ? ` · Archivo: ${r.file}` : ''}</div>
       ${
         isAudio
-          ? `<audio controls preload="none"><source src="${r.file}" type="audio/${r.file.endsWith('.wav')?'wav':'mpeg'}"></audio>`
-          : isVideo
-          ? `<video controls preload="none"><source src="${r.file}" type="video/mp4"></video>`
-          : isVimeo
-          ? `<div class="video-embed"><iframe src="${r.file}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
+          ? `<audio controls preload="none"><source src="${r.file}" type="audio/${r.file.endsWith('.wav')?'wav':'mpeg'}" />Tu navegador no soporta audio HTML5.</audio>`
           : `<div class="actions">
-              ${isPpt
-                ? `<a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
-                : `<a class="btn" href="${r.file}" target="_blank">Abrir</a>
-                   <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`}
+               ${
+                 isPpt
+                   ? `<a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
+                   : isVimeo
+                     /* SOLO VIMEO: no reproducimos en el portal, solo abrimos Vimeo */
+                     ? `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Ver en Vimeo</a>`
+                     : `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Abrir</a>
+                        <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
+               }
              </div>`
-      }`;
+      }
+      ${isPdf ? `<div class="meta">Sugerencia: si el PDF no abre en el navegador, use “Descargar”.</div>` : ``}
+    `;
     grid.appendChild(card);
   });
-  empty.style.display=filtered.length?'none':'block';
+
+  empty.style.display = filtered.length ? 'none' : 'block';
 }
-query.addEventListener('input',render);
-yearSel.addEventListener('change',render);
-typeSel.addEventListener('change',render);
+query.addEventListener('input', render);
+yearSel.addEventListener('change', render);
+typeSel.addEventListener('change', render);
 render();
 </script>
 </body>
