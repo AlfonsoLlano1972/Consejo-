@@ -65,9 +65,8 @@
           <option value="">🗂️ Todos los tipos</option>
           <option value="pdf">PDF</option>
           <option value="html">HTML</option>
-          <option value="audio">Audio</option>
           <option value="ppt">Powerpoint</option>
-          <option value="vimeo">Vimeo</option> <!-- añadido -->
+          <option value="vimeo">Vimeo</option>
         </select>
       </div>
     </div>
@@ -84,19 +83,30 @@
 
 <script>
 /* === 1) LISTA DE RECURSOS ====================================================
-   "type": "pdf" | "html" | "audio" | "ppt" | "vimeo"
-   "file" es la ruta relativa en el repo (o URL si es Vimeo).                 */
+   "type": "pdf" | "html" | "ppt" | "vimeo"
+   "file" es la ruta relativa en el repo (o URL si es Vimeo).
+   "order" controla la posición manual en el grid.                          */
 const items = [
-  { title: "Informe Financiero — Junio 2025 (PDF)", file: "Informe_economico_financiero_junio_2025.pdf", date: "2025-06-25", tags: ["pdf","finanzas","junio","2025"], type: "pdf" },
-  { title: "Podcast Resumen — Junio 2025", file: "podcast-junio-2025.mp3", date: "2025-06-19", tags: ["audio","podcast","junio","2025"], type: "audio" },
-  { title: "Dashboard Informe Financiero — Junio 2025", file: "Visualizacion_Informe_Financiero_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
-  { title: "Ratios DFA— Junio 2025", file: "Benchmarking_DFA_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
-  { title: "Comparativa DFA— Junio 2025", file: "DFA_Balance_Financiero_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
-  { title: "Comparativa Departamentos DFA— Junio 2025", file: "Comparativo_Departamentos_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025","Departamentos"], type: "html" },
-  { title: "Presentación Consejo— Septiembre 2025", file: "Consejo_02_septiembre_2025.pptx", date: "2025-09-02", tags: ["ppt","consejo","septiembre","2025"], type: "ppt" },
+  // 1) Presentación Consejo — Sept 2025 (PPT)
+  { order: 1, title: "Presentación Consejo— Septiembre 2025", file: "Consejo_02_septiembre_2025.pptx", date: "2025-09-02", tags: ["ppt","consejo","septiembre","2025"], type: "ppt" },
 
-  /* >>> NUEVO VIMEO: solo abre en Vimeo, no se reproduce aquí <<< */
-  { title: "Resumen Económico Financiero — Septiembre 2025", file: "https://vimeo.com/1113493999", date: "2025-09-05", tags: ["vimeo","video","septiembre","2025"], type: "vimeo" }
+  // 2) Informe financiero PDF — Jun 2025
+  { order: 2, title: "Informe Financiero — Junio 2025 (PDF)", file: "Informe_economico_financiero_junio_2025.pdf", date: "2025-06-25", tags: ["pdf","finanzas","junio","2025"], type: "pdf" },
+
+  // 3) Vimeo — Resumen económico financiero — Sept 2025
+  { order: 3, title: "Resumen Económico Financiero — Septiembre 2025", file: "https://vimeo.com/1113493999", date: "2025-09-05", tags: ["vimeo","video","septiembre","2025"], type: "vimeo" },
+
+  // 4) Ratios DFA — Jun 2025 (HTML)
+  { order: 4, title: "Ratios DFA— Junio 2025", file: "Benchmarking_DFA_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+
+  // 5) Dashboard Informe Financiero — Jun 2025 (HTML)
+  { order: 5, title: "Dashboard Informe Financiero — Junio 2025", file: "Visualizacion_Informe_Financiero_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+
+  // 6) Comparativa DFA — Jun 2025 (HTML)
+  { order: 6, title: "Comparativa DFA— Junio 2025", file: "DFA_Balance_Financiero_Jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025"], type: "html" },
+
+  // 7) Comparativa Departamentos DFA — Jun 2025 (HTML)
+  { order: 7, title: "Comparativa Departamentos DFA— Junio 2025", file: "Comparativo_Departamentos_jun_2025.html", date: "2025-06-19", tags: ["Dashboard","Informe","DFA","junio","2025","Departamentos"], type: "html" },
 ];
 
 /* === 2) UTILIDADES =========================================================== */
@@ -105,7 +115,6 @@ const byDateDesc = (a,b) => new Date(b.date) - new Date(a.date);
 const iconFor = (type) => {
   if(type === "pdf")   return "📄";
   if(type === "html")  return "🌐";
-  if(type === "audio") return "🎧";
   if(type === "ppt")   return "📊";
   if(type === "vimeo") return "🎬";
   return "📦";
@@ -136,11 +145,11 @@ function render(){
       const hay = [r.title, r.file, r.type, ...(r.tags||[])].join(' ').toLowerCase();
       return hay.includes(q);
     })
-    .sort(byDateDesc);
+    // Orden manual primero; si no hay order, usa fecha
+    .sort((a,b) => (a.order??999) - (b.order??999) || byDateDesc(a,b));
 
   grid.innerHTML = '';
   filtered.forEach(r => {
-    const isAudio = r.type === "audio";
     const isPdf   = r.type === "pdf";
     const isPpt   = r.type === "ppt";
     const isVimeo = r.type === "vimeo";
@@ -155,21 +164,16 @@ function render(){
       </div>
       <h3>${iconFor(r.type)} ${r.title}</h3>
       <div class="meta">Publicado: ${fmtDate(r.date)}${!isVimeo ? ` · Archivo: ${r.file}` : ''}</div>
-      ${
-        isAudio
-          ? `<audio controls preload="none"><source src="${r.file}" type="audio/${r.file.endsWith('.wav')?'wav':'mpeg'}" />Tu navegador no soporta audio HTML5.</audio>`
-          : `<div class="actions">
-               ${
-                 isPpt
-                   ? `<a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
-                   : isVimeo
-                     /* SOLO VIMEO: no reproducimos en el portal, solo abrimos Vimeo */
-                     ? `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Ver en Vimeo</a>`
-                     : `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Abrir</a>
-                        <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
-               }
-             </div>`
-      }
+      <div class="actions">
+        ${
+          isPpt
+            ? `<a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
+            : isVimeo
+              ? `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Ver en Vimeo</a>`
+              : `<a class="btn" href="${r.file}" target="_blank" rel="noopener">Abrir</a>
+                 <a class="btn sec" href="${r.file}" download>⬇️ Descargar</a>`
+        }
+      </div>
       ${isPdf ? `<div class="meta">Sugerencia: si el PDF no abre en el navegador, use “Descargar”.</div>` : ``}
     `;
     grid.appendChild(card);
